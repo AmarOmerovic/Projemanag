@@ -2,13 +2,14 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_of_nav_main"
     android:background="@drawable/nav_header_main_background"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:id="@+id/test"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    tools:viewBindingIgnore="false">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circularImage"
@@ -30,6 +31,8 @@
         android:layout_marginTop="@dimen/nav_content_margin_top"
         android:layout_marginEnd="@dimen/nav_content_margin_start_end"
         android:layout_marginBottom="@dimen/nav_content_margin_bottom"
+        android:gravity="center"
+        android:minWidth="@dimen/circle_image_width_height"
         android:textColor="@color/white"
         android:textSize="@dimen/nav_user_name_text_size"
         tools:text="Username" />

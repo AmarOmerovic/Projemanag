@@ -3,7 +3,9 @@ package com.amaromerovic.projemanag.activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.amaromerovic.projemanag.R
+import com.amaromerovic.projemanag.activities.utils.Constants
 import com.amaromerovic.projemanag.databinding.ActivitySignInBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.model.User
@@ -25,6 +27,15 @@ class SignInActivity : BaseActivity() {
         binding.singUpToolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@SignInActivity, StartActivity::class.java)
+                intent.putExtra(Constants.DURATION_KEY, 0L)
+                startActivity(intent)
+                finish()
+            }
+        })
 
         auth = FirebaseAuth.getInstance()
 
