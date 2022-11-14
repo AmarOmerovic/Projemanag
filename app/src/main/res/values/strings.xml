@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Projemanag</string>
+    <string name="task_image">Task image</string>
+    <string name="let_s_get_started">Let\'s get started</string>
+    <string name="collaborate_and_plan_together_across_multiple_devices_on_projemanag_s_minimalist_interface">Collaborate and Plan Together Across Multiple Devices on Projemanag\'s Minimalist Interface.</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="enter_your_name_email_and_password_to_register_with_us">Enter your name, email and password to register with us.</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_email_and_password_to_sign_in_with_us">Enter your email and password to sign in with us.</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="please_wait">Please wait…</string>
+
+</resources>

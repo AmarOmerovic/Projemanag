@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00FFFFFF"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="@dimen/progress_bar_padding">
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/progress_bar_margin_end"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:indeterminateTint="@color/blue" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:gravity="start|center"
+        android:text="@string/please_wait"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/progress_bar_text_size" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
