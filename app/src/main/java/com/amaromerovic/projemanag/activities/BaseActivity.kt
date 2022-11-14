@@ -8,11 +8,13 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivityBaseBinding
 import com.amaromerovic.projemanag.databinding.ProgressDialogBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 
 open class BaseActivity : AppCompatActivity() {
@@ -68,5 +70,19 @@ open class BaseActivity : AppCompatActivity() {
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this@BaseActivity, R.color.snackbar_error_color))
         snackBar.show()
+    }
+
+    fun isInputEmpty(
+        textInputLayout: TextInputLayout,
+        editText: AppCompatEditText
+    ): Boolean {
+        return if (editText.text!!.isEmpty()) {
+            textInputLayout.isErrorEnabled = true
+            textInputLayout.error = "Field can not be empty!"
+            true
+        } else {
+            textInputLayout.isErrorEnabled = false
+            false
+        }
     }
 }

@@ -1,15 +1,16 @@
 package com.amaromerovic.projemanag.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatEditText
+import android.widget.Toast
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivitySignUpBinding
-import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseActivity() {
     private lateinit var binding: ActivitySignUpBinding
-
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,22 +24,46 @@ class SignUpActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        auth = Firebase.auth
 
         binding.signUp.setOnClickListener {
-            checkIfItIsEmpty(binding.nameInputLayout, binding.name)
-            checkIfItIsEmpty(binding.emailInputLayout, binding.email)
-            checkIfItIsEmpty(binding.passwordInputLayout, binding.password)
+            val isNameValid = isInputEmpty(binding.nameInputLayout, binding.name)
+            val isEmailValid = isInputEmpty(binding.emailInputLayout, binding.email)
+            val isPasswordValid = isInputEmpty(binding.passwordInputLayout, binding.password)
+            if (!isNameValid && !isEmailValid && !isPasswordValid) {
+                registerUser()
+            }
 
         }
     }
 
+    private fun registerUser() {
+        val name: String = binding.name.text.toString().trim { it <= ' ' }
+        val email: String = binding.email.text.toString().trim { it <= ' ' }
+        val password: String = binding.password.text.toString()
 
-    private fun checkIfItIsEmpty(textInputLayout : TextInputLayout, editText: AppCompatEditText) {
-        if(editText.text!!.isEmpty()) {
-            textInputLayout.isErrorEnabled = true
-            textInputLayout.error = "Field is empty!"
-        } else {
-            textInputLayout.isErrorEnabled = false
-        }
+        showProgressDialog()
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                hideProgressDialog()
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    val regEmail = user?.email
+                    Toast.makeText(
+                        this@SignUpActivity,
+                        "$name, you have successfully singed up the email address $regEmail",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    auth.signOut()
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@SignUpActivity,
+                        task.exception?.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 }

@@ -16,7 +16,7 @@
         android:fontFamily="@font/audiowide"
         android:gravity="center"
         android:text="@string/app_name"
-        android:textColor="#039BE5"
+        android:textColor="@color/darkBlue"
         android:textSize="@dimen/header_text_intro_screen"
         android:textStyle="bold" />
 

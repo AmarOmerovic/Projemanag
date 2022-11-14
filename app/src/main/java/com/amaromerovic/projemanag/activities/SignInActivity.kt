@@ -1,14 +1,14 @@
 package com.amaromerovic.projemanag.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatEditText
+import android.widget.Toast
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivitySignInBinding
-import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseActivity() {
     private lateinit var binding: ActivitySignInBinding
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,21 +23,44 @@ class SignInActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.signUp.setOnClickListener {
-            checkIfItIsEmpty(binding.emailInputLayout, binding.email)
-            checkIfItIsEmpty(binding.passwordInputLayout, binding.password)
+        auth = FirebaseAuth.getInstance()
 
+        binding.signUp.setOnClickListener {
+            val isEmailValid = isInputEmpty(binding.emailInputLayout, binding.email)
+            val isPasswordValid = isInputEmpty(binding.passwordInputLayout, binding.password)
+
+            if (!isEmailValid && !isPasswordValid) {
+                signInUser()
+            }
         }
     }
 
 
-    private fun checkIfItIsEmpty(textInputLayout: TextInputLayout, editText: AppCompatEditText) {
-        if (editText.text!!.isEmpty()) {
-            textInputLayout.isErrorEnabled = true
-            textInputLayout.error = "Field is empty!"
-        } else {
-            textInputLayout.isErrorEnabled = false
-        }
+    private fun signInUser() {
+        val email: String = binding.email.text.toString().trim { it <= ' ' }
+        val password: String = binding.password.text.toString()
+
+        showProgressDialog()
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                hideProgressDialog()
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        this@SignInActivity,
+                        "You have successfully singed in!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    auth.signOut()
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@SignInActivity,
+                        task.exception?.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 
 }

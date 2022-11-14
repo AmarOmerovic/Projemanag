@@ -13,7 +13,7 @@
         android:layout_marginEnd="@dimen/progress_bar_margin_end"
         android:layout_weight="1"
         android:background="#00FFFFFF"
-        android:indeterminateTint="@color/blue" />
+        android:indeterminateTint="@color/white" />
 
     <TextView
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:background="#00FFFFFF"
         android:gravity="start|center"
         android:text="@string/please_wait"
-        android:textColor="@color/blue"
+        android:textColor="@color/white"
         android:textSize="@dimen/progress_bar_text_size" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
