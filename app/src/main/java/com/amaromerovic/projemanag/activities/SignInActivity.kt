@@ -1,9 +1,12 @@
 package com.amaromerovic.projemanag.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivitySignInBinding
+import com.amaromerovic.projemanag.firebase.FirestoreHandler
+import com.amaromerovic.projemanag.model.User
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : BaseActivity() {
@@ -35,6 +38,11 @@ class SignInActivity : BaseActivity() {
         }
     }
 
+    fun signInSuccess(user: User) {
+        hideProgressDialog()
+        startActivity(Intent(this@SignInActivity, MainActivity::class.java))
+        finish()
+    }
 
     private fun signInUser() {
         val email: String = binding.email.text.toString().trim { it <= ' ' }
@@ -44,15 +52,8 @@ class SignInActivity : BaseActivity() {
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                hideProgressDialog()
                 if (task.isSuccessful) {
-                    Toast.makeText(
-                        this@SignInActivity,
-                        "You have successfully singed in!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    auth.signOut()
-                    finish()
+                    FirestoreHandler().signInUser(this@SignInActivity)
                 } else {
                     Toast.makeText(
                         this@SignInActivity,
