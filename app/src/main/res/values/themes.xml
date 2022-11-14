@@ -13,7 +13,6 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/audiowide</item>
-        <item name="android:windowAnimationStyle">@style/MyCustomActivityAnimation</item>
     </style>
 
     <style name="Theme.Projemanag.NoActionBar.FullScreen" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -30,7 +29,6 @@
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/audiowide</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowAnimationStyle">@style/MyCustomActivityAnimation</item>
     </style>
 
     <style name="Theme.Projemanag.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">

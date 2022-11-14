@@ -2,6 +2,8 @@ package com.amaromerovic.projemanag.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -12,6 +14,7 @@ import com.amaromerovic.projemanag.databinding.ActivityMainBinding
 import com.amaromerovic.projemanag.databinding.NavHeaderMainBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.model.User
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -47,17 +50,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         firestore = FirebaseFirestore.getInstance()
 
-        firestore.collection(Constants.USERS_COLLECTION_KEY)
-            .document(FirestoreHandler().getCurrentUserUID())
-            .get()
-            .addOnSuccessListener {
-                val loggedInUser = it.toObject(User::class.java)
-                navViewHeaderBinding.userName.text = loggedInUser?.name.toString()
-            }
-
+        FirestoreHandler().signInUser(this@MainActivity)
 
         binding.navView.setNavigationItemSelectedListener(this)
 
+    }
+
+    fun updateNavigationUserDetails(user: User) {
+        Glide
+            .with(this@MainActivity)
+            .load(user.image)
+            .fitCenter()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(navViewHeaderBinding.circularImage);
+
+        navViewHeaderBinding.userName.text = user.name.toString()
+
+    }
+
+    private fun goBack() {
+        showProgressDialog()
+        Handler.createAsync(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this@MainActivity, StartActivity::class.java)
+            intent.putExtra(Constants.DURATION_KEY, 0L)
+            hideProgressDialog()
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+            finish()
+        }, 1000)
     }
 
     private fun toggleDrawer() {
@@ -74,10 +94,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 .show()
             R.id.singOut -> {
                 FirebaseAuth.getInstance().signOut()
-                val intent = Intent(this@MainActivity, StartActivity::class.java)
-                intent.putExtra(Constants.DURATION_KEY, 0L)
-                startActivity(intent)
-                finish()
+                goBack()
             }
         }
         if (binding.drawerLayout.isOpen) {

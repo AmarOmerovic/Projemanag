@@ -26,6 +26,7 @@ class StartActivity : AppCompatActivity() {
             val currentUserUID = FirestoreHandler().getCurrentUserUID()
             if (currentUserUID.isNotEmpty()) {
                 startActivity(Intent(this@StartActivity, MainActivity::class.java))
+                finish()
             }
             isReady = true
         }, duration)
@@ -49,12 +50,14 @@ class StartActivity : AppCompatActivity() {
         binding.signUp.setOnClickListener {
             val intent = Intent(this@StartActivity, SignUpActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(com.amaromerovic.projemanag.R.anim.slide_in_right,com.amaromerovic.projemanag.R.anim.slide_out_left)
             finish()
         }
 
         binding.signIn.setOnClickListener {
             val intent = Intent(this@StartActivity, SignInActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(com.amaromerovic.projemanag.R.anim.slide_in_right,com.amaromerovic.projemanag.R.anim.slide_out_left)
             finish()
         }
     }

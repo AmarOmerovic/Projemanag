@@ -1,6 +1,8 @@
 package com.amaromerovic.projemanag.firebase
 
+import android.app.Activity
 import android.widget.Toast
+import com.amaromerovic.projemanag.activities.MainActivity
 import com.amaromerovic.projemanag.activities.SignInActivity
 import com.amaromerovic.projemanag.activities.SignUpActivity
 import com.amaromerovic.projemanag.activities.utils.Constants
@@ -37,17 +39,33 @@ class FirestoreHandler {
         return currentUserUID
     }
 
-    fun signInUser(activity: SignInActivity) {
+    fun signInUser(activity: Activity) {
         fireStore.collection(Constants.USERS_COLLECTION_KEY)
             .document(getCurrentUserUID())
             .get()
             .addOnSuccessListener {
                 val loggedInUser = it.toObject(User::class.java)
-                if (loggedInUser != null) {
-                    activity.signInSuccess(loggedInUser)
+
+                when (activity) {
+                    is SignInActivity -> {
+                        if (loggedInUser != null) {
+                            activity.signInSuccess(loggedInUser)
+                        }
+                    }
+                    is MainActivity -> {
+                        if (loggedInUser != null) {
+                            activity.updateNavigationUserDetails(loggedInUser)
+                        }
+                    }
                 }
+
+
             }
             .addOnFailureListener {
+                when (activity) {
+                    is SignInActivity -> activity.hideProgressDialog()
+                    is MainActivity -> activity.hideProgressDialog()
+                }
                 Toast.makeText(
                     activity,
                     "Something went wrong getting the user from the collection",

@@ -31,10 +31,7 @@ class SignUpActivity : BaseActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val intent = Intent(this@SignUpActivity, StartActivity::class.java)
-                intent.putExtra(Constants.DURATION_KEY, 0L)
-                startActivity(intent)
-                finish()
+                goBack()
             }
         })
 
@@ -52,6 +49,14 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
+    private fun goBack() {
+        val intent = Intent(this@SignUpActivity, StartActivity::class.java)
+        intent.putExtra(Constants.DURATION_KEY, 0L)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        finish()
+    }
+
 
     fun userRegisteredSuccess() {
         Toast.makeText(
@@ -61,7 +66,7 @@ class SignUpActivity : BaseActivity() {
         ).show()
         hideProgressDialog()
         auth.signOut()
-        finish()
+        goBack()
     }
 
     private fun registerUser() {
@@ -78,6 +83,7 @@ class SignUpActivity : BaseActivity() {
                     val user = User(authUser?.uid, name, email)
                     FirestoreHandler().registerUser(this@SignUpActivity, user)
                 } else {
+                    hideProgressDialog()
                     Toast.makeText(
                         this@SignUpActivity,
                         task.exception?.message,
