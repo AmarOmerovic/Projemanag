@@ -15,5 +15,6 @@
     <string name="my_profile">My Profile</string>
     <string name="sign_out">Sign out</string>
     <string name="profile_image">Profile image</string>
+    <string name="update">Update</string>
 
 </resources>

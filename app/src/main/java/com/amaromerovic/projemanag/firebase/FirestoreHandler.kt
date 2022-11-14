@@ -3,6 +3,7 @@ package com.amaromerovic.projemanag.firebase
 import android.app.Activity
 import android.widget.Toast
 import com.amaromerovic.projemanag.activities.MainActivity
+import com.amaromerovic.projemanag.activities.ProfileActivity
 import com.amaromerovic.projemanag.activities.SignInActivity
 import com.amaromerovic.projemanag.activities.SignUpActivity
 import com.amaromerovic.projemanag.activities.utils.Constants
@@ -39,7 +40,7 @@ class FirestoreHandler {
         return currentUserUID
     }
 
-    fun signInUser(activity: Activity) {
+    fun loadUserData(activity: Activity) {
         fireStore.collection(Constants.USERS_COLLECTION_KEY)
             .document(getCurrentUserUID())
             .get()
@@ -55,6 +56,12 @@ class FirestoreHandler {
                     is MainActivity -> {
                         if (loggedInUser != null) {
                             activity.updateNavigationUserDetails(loggedInUser)
+                        }
+                    }
+
+                    is ProfileActivity -> {
+                        if (loggedInUser != null) {
+                            activity.setUserDataInUI(loggedInUser)
                         }
                     }
                 }

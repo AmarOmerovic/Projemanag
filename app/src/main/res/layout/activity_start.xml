@@ -70,7 +70,7 @@
         android:gravity="center"
         android:minHeight="@dimen/button_height_intro_screen"
         android:text="@string/sign_up"
-        android:textColor="@color/blue"
+        android:textColor="@color/darkBlue"
         android:textSize="@dimen/button_text_intro_screen"
         android:textStyle="bold"
         tools:ignore="TextContrastCheck" />

@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.activities.utils.Constants
@@ -50,7 +49,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         firestore = FirebaseFirestore.getInstance()
 
-        FirestoreHandler().signInUser(this@MainActivity)
+        FirestoreHandler().loadUserData(this@MainActivity)
 
         binding.navView.setNavigationItemSelectedListener(this)
 
@@ -90,8 +89,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.myProfile -> Toast.makeText(this@MainActivity, "My Profile", Toast.LENGTH_LONG)
-                .show()
+            R.id.myProfile -> {
+                toggleDrawer()
+                Handler.createAsync(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
+                }, 500)
+
+            }
             R.id.singOut -> {
                 FirebaseAuth.getInstance().signOut()
                 goBack()

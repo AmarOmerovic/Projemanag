@@ -32,4 +32,8 @@
     <dimen name="nav_image_circular_border_width">1dp</dimen>
     <dimen name="nav_divider_height">0.5dp</dimen>
 
+    <dimen name="circle_image_width_height_my_profile">125dp</dimen>
+    <dimen name="margin_top_circle_image">20dp</dimen>
+
+
 </resources>
