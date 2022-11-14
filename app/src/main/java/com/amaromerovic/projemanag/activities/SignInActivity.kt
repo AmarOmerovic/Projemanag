@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.amaromerovic.projemanag.R
-import com.amaromerovic.projemanag.activities.utils.Constants
+import com.amaromerovic.projemanag.utils.Constants
 import com.amaromerovic.projemanag.databinding.ActivitySignInBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.model.User

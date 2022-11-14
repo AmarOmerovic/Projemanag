@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.amaromerovic.projemanag.activities.utils.Constants
+import com.amaromerovic.projemanag.utils.Constants
 import com.amaromerovic.projemanag.databinding.ActivityStartBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 

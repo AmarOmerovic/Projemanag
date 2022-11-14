@@ -6,8 +6,8 @@ import com.amaromerovic.projemanag.activities.MainActivity
 import com.amaromerovic.projemanag.activities.ProfileActivity
 import com.amaromerovic.projemanag.activities.SignInActivity
 import com.amaromerovic.projemanag.activities.SignUpActivity
-import com.amaromerovic.projemanag.activities.utils.Constants
 import com.amaromerovic.projemanag.model.User
+import com.amaromerovic.projemanag.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -23,6 +23,7 @@ class FirestoreHandler {
                 activity.userRegisteredSuccess()
             }
             .addOnFailureListener {
+                activity.hideProgressDialog()
                 Toast.makeText(
                     activity,
                     "Something went wrong adding the user to the collection",
@@ -78,6 +79,20 @@ class FirestoreHandler {
                     "Something went wrong getting the user from the collection",
                     Toast.LENGTH_LONG
                 ).show()
+            }
+    }
+
+    fun updateUserProfileData(activity: ProfileActivity, userHashMap: HashMap<String, Any>) {
+        fireStore.collection(Constants.USERS_COLLECTION_KEY)
+            .document(getCurrentUserUID())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Profile updated successfully.", Toast.LENGTH_LONG).show()
+                activity.profileUpdateSuccess()
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+                Toast.makeText(activity, "Profile update error!", Toast.LENGTH_LONG).show()
+
             }
     }
 }

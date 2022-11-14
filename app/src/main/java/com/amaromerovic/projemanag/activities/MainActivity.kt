@@ -7,12 +7,13 @@ import android.os.Looper
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import com.amaromerovic.projemanag.R
-import com.amaromerovic.projemanag.activities.utils.Constants
 import com.amaromerovic.projemanag.databinding.ActivityMainBinding
 import com.amaromerovic.projemanag.databinding.NavHeaderMainBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.model.User
+import com.amaromerovic.projemanag.utils.Constants
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +24,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var viewHeader: View
     private lateinit var navViewHeaderBinding: NavHeaderMainBinding
     private lateinit var firestore: FirebaseFirestore
+
+    private val startUpdateActivityAndGetResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                FirestoreHandler().loadUserData(this)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,8 +101,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 toggleDrawer()
                 Handler.createAsync(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this@MainActivity, ProfileActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
+                    startUpdateActivityAndGetResult.launch(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 }, 500)
 
             }

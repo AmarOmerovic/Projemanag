@@ -3,9 +3,9 @@ package com.amaromerovic.projemanag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class ProfileActivity : AppCompatActivity() {
+class BoardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.activity_board)
     }
 }
