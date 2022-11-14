@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_splash_background"
+    android:orientation="vertical"
+    tools:context=".activities.CreateBoardActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/createBoardToolbar"
+        android:layout_width="match_parent"
+        android:background="@color/darkBlue"
+        android:layout_height="?android:attr/actionBarSize"
+        android:gravity="center"
+        tools:ignore="RtlSymmetry">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:text="@string/create_board"
+            android:textColor="@color/white"
+            android:textSize="@dimen/toolbar_text_size"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/global_padding">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation_radius"
+            app:cardUseCompatPadding="true">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/global_padding">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circularImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/board_image_size"
+                    android:layout_marginTop="@dimen/margin_top_circle_image"
+                    android:contentDescription="@string/profile_image"
+                    android:src="@drawable/ic_board_place_holder"
+                    app:civ_border_color="@color/darkBlue"
+                    app:civ_border_width="@dimen/nav_image_circular_border_width" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/boardNameInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top_intro_screen">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/boardName"
+                        style="@style/edit_text_sign_in_up"
+                        android:hint="@string/board_name"
+                        android:inputType="textCapWords"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/update"
+                    style="@style/sign_in_up_button_in_activities"
+                    android:text="@string/create"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.cardview.widget.CardView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
+

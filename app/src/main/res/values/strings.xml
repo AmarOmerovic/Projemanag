@@ -16,5 +16,8 @@
     <string name="sign_out">Sign out</string>
     <string name="profile_image">Profile image</string>
     <string name="update">Update</string>
+    <string name="create_board">Create Board</string>
+    <string name="create">Create</string>
+    <string name="board_name">Board Name</string>
 
 </resources>

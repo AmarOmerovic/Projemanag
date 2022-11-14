@@ -35,5 +35,10 @@
     <dimen name="circle_image_width_height_my_profile">125dp</dimen>
     <dimen name="margin_top_circle_image">20dp</dimen>
 
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="board_image_size">125dp</dimen>
+    <dimen name="create_board_til_marginTop">25dp</dimen>
+    <dimen name="create_board_btn_marginTop">30dp</dimen>
+
 
 </resources>
