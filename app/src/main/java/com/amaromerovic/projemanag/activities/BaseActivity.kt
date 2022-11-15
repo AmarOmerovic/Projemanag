@@ -18,7 +18,6 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.amaromerovic.projemanag.databinding.ActivityBaseBinding
 import com.amaromerovic.projemanag.databinding.ProgressDialogBinding
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
 
 open class BaseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBaseBinding
@@ -46,9 +45,6 @@ open class BaseActivity : AppCompatActivity() {
         progressDialog.dismiss()
     }
 
-    fun getCurrentUserID(): String {
-        return FirebaseAuth.getInstance().currentUser!!.uid
-    }
 
     fun doubleBackToExit() {
         if (doubleBackToExitPressedOnce) {

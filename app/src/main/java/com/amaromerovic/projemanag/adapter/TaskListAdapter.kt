@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.activities.TaskListActivity
@@ -67,7 +68,7 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
                     context.createTaskList(listName)
                 }
             } else {
-                showSnackBar(holder.binding.root)
+                showSnackBar("Please enter a list name!", holder.binding.root)
             }
         }
 
@@ -89,13 +90,39 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
                     context.updateTaskList(position, listName, model)
                 }
             } else {
-                showSnackBar(holder.binding.root)
+                showSnackBar("Please enter a list name!", holder.binding.root)
             }
         }
 
         holder.binding.deleteItem.setOnClickListener {
             alertDialogForDeleteList(position, model.title)
         }
+
+        holder.binding.addCardButton.setOnClickListener {
+            holder.binding.addCardButton.visibility = View.GONE
+            holder.binding.addCard.visibility = View.VISIBLE
+        }
+
+        holder.binding.closeCardName.setOnClickListener {
+            holder.binding.addCardButton.visibility = View.VISIBLE
+            holder.binding.addCard.visibility = View.GONE
+        }
+
+        holder.binding.doneCardName.setOnClickListener {
+            val cardName = holder.binding.cardName.text.toString()
+            if (cardName.isNotEmpty()) {
+                if (context is TaskListActivity) {
+                    context.addCardToTaskList(position, cardName)
+                }
+            } else {
+                showSnackBar("Please enter a card name!", holder.binding.root)
+            }
+        }
+
+        holder.binding.recyclerViewCardList.layoutManager = LinearLayoutManager(context)
+        holder.binding.recyclerViewCardList.setHasFixedSize(true)
+        val adapter = CardListAdapter(context, model.cards)
+        holder.binding.recyclerViewCardList.adapter = adapter
     }
 
     override fun getItemCount(): Int {
@@ -107,13 +134,13 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
         builder.setTitle("Alert")
         builder.setMessage("Are you sure you want to delete $title?")
         builder.setIcon(R.drawable.alert)
+        builder.setNegativeButton("No") { dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
         builder.setPositiveButton("Yes") { dialogInterface, _ ->
             if (context is TaskListActivity) {
                 context.deleteTaskList(position)
             }
-            dialogInterface.dismiss()
-        }
-        builder.setNegativeButton("No") { dialogInterface, _ ->
             dialogInterface.dismiss()
         }
 
@@ -122,10 +149,10 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
         alertDialog.show()
     }
 
-    private fun showSnackBar(view: View) {
+    private fun showSnackBar(text: String, view: View) {
         val snackBar = Snackbar.make(
             view,
-            "Please enter a list name!",
+            text,
             Snackbar.LENGTH_LONG
         )
         val snackBarView = snackBar.view

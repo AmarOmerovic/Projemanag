@@ -9,8 +9,8 @@ import com.amaromerovic.projemanag.databinding.BoardItemBinding
 import com.amaromerovic.projemanag.models.Board
 import com.bumptech.glide.Glide
 
-class BoardItemAdapter(private val context: Context, private val boards: ArrayList<Board>) :
-    RecyclerView.Adapter<BoardItemAdapter.ViewHolder>() {
+class BoardListAdapter(private val context: Context, private val boards: ArrayList<Board>) :
+    RecyclerView.Adapter<BoardListAdapter.ViewHolder>() {
 
     private var onBoardItemClick: OnBoardItemClick? = null
 

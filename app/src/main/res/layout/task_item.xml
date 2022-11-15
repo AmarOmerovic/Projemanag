@@ -150,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/add_task_list_name_margin"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/add_task_list_name_card_corner_radius"
                 app:cardElevation="@dimen/add_task_list_name_card_elevation"
                 tools:visibility="visible">
@@ -211,7 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/add_task_list_name_margin"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/add_task_list_name_card_corner_radius"
                 app:cardElevation="@dimen/add_task_list_name_card_elevation"
                 tools:visibility="visible">

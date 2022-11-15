@@ -10,7 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
-import com.amaromerovic.projemanag.adapter.BoardItemAdapter
+import com.amaromerovic.projemanag.adapter.BoardListAdapter
 import com.amaromerovic.projemanag.databinding.ActivityMainBinding
 import com.amaromerovic.projemanag.databinding.NavHeaderMainBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
@@ -88,10 +88,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 LinearLayoutManager(this)
             binding.appBarId.mainContentLayout.recyclerView.setHasFixedSize(true)
 
-            val adapter = BoardItemAdapter(this@MainActivity, boards)
+            val adapter = BoardListAdapter(this@MainActivity, boards)
             binding.appBarId.mainContentLayout.recyclerView.adapter = adapter
 
-            adapter.onBoardItemClickListener(object : BoardItemAdapter.OnBoardItemClick {
+            adapter.onBoardItemClickListener(object : BoardListAdapter.OnBoardItemClick {
                 override fun onItemClick(position: Int, model: Board) {
                     val intent = Intent(this@MainActivity, TaskListActivity::class.java)
                     intent.putExtra(Constants.DOCUMENT_ID, model.documentID)

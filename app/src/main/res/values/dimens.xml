@@ -74,4 +74,13 @@
     <dimen name="card_list_margin">5dp</dimen>
 
 
+    <dimen name="card_item_margin">8dp</dimen>
+    <dimen name="card_item_elevation">5dp</dimen>
+    <dimen name="card_item_label_height">15dp</dimen>
+    <dimen name="card_item_name_padding">10dp</dimen>
+    <dimen name="card_item_name_size">16sp</dimen>
+    <dimen name="card_item_members_text_padding">10sp</dimen>
+    <dimen name="card_item_members_text_size">14sp</dimen>
+
+
 </resources>

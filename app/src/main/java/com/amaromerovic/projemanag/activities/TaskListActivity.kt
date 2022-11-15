@@ -8,6 +8,7 @@ import com.amaromerovic.projemanag.adapter.TaskListAdapter
 import com.amaromerovic.projemanag.databinding.ActivityTaskListBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.models.Board
+import com.amaromerovic.projemanag.models.Card
 import com.amaromerovic.projemanag.models.Task
 import com.amaromerovic.projemanag.utils.Constants
 
@@ -67,7 +68,7 @@ class TaskListActivity : BaseActivity() {
 
 
         binding.recyclerViewTaskList.layoutManager =
-            GridLayoutManager(this@TaskListActivity, 3, GridLayoutManager.HORIZONTAL, false)
+            GridLayoutManager(this@TaskListActivity, 2, GridLayoutManager.HORIZONTAL, false)
         binding.recyclerViewTaskList.setHasFixedSize(false)
         val adapter = TaskListAdapter(this@TaskListActivity, board.taskList)
         binding.recyclerViewTaskList.adapter = adapter
@@ -100,8 +101,30 @@ class TaskListActivity : BaseActivity() {
 
     fun deleteTaskList(position: Int) {
         boardDetails.taskList.removeAt(position)
-
         boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+
+        showProgressDialog()
+        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, boardDetails)
+    }
+
+    fun addCardToTaskList(position: Int, cardName: String) {
+        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+
+        val cardAssignedUsersList: ArrayList<String> = ArrayList()
+        cardAssignedUsersList.add(FirestoreHandler().getCurrentUserUID())
+
+        val card = Card(cardName, FirestoreHandler().getCurrentUserUID(), cardAssignedUsersList)
+
+        val cardsList = boardDetails.taskList[position].cards
+        cardsList.add(card)
+
+        val task = Task(
+            boardDetails.taskList[position].title,
+            boardDetails.taskList[position].createdBy,
+            cardsList
+        )
+
+        boardDetails.taskList[position] = task
 
         showProgressDialog()
         FirestoreHandler().addUpdateTaskList(this@TaskListActivity, boardDetails)

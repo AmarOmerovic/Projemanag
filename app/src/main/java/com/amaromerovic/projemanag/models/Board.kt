@@ -20,7 +20,7 @@ data class Board(
         parcel.createTypedArrayList(Task.CREATOR) as ArrayList<Task>
     )
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) = with(parcel) {
         parcel.writeString(name)
         parcel.writeString(image)
         parcel.writeString(createdBy)

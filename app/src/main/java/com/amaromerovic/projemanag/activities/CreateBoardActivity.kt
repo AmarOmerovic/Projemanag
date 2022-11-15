@@ -102,7 +102,7 @@ class CreateBoardActivity : BaseActivity() {
         val isBoardNameValid = isInputEmpty(binding.boardNameInputLayout, binding.boardName)
         if (!isBoardNameValid) {
             val assignedUsersArrayList: ArrayList<String> = ArrayList()
-            assignedUsersArrayList.add(getCurrentUserID())
+            assignedUsersArrayList.add(FirestoreHandler().getCurrentUserUID())
 
             val board = Board(
                 binding.boardName.text.toString(),

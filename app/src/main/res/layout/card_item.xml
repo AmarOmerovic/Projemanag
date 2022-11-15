@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_item_margin"
+    android:background="?attr/selectableItemBackground"
+    android:elevation="@dimen/card_item_elevation"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/labelColor"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_item_label_height"
+            android:background="@color/darkBlue"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/cardName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_item_members_text_padding"
+            android:textSize="@dimen/card_item_name_size"
+            tools:text="Card Name" />
+
+
+        <TextView
+            android:id="@+id/membersName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="@dimen/card_item_members_text_padding"
+            android:textColor="@color/darkBlue"
+            android:textSize="@dimen/card_item_members_text_size"
+            android:visibility="gone"
+            tools:text="Member Name" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.cardview.widget.CardView>
