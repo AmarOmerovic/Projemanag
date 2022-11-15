@@ -134,6 +134,7 @@ class FirestoreHandler {
             .addOnSuccessListener { document ->
                 val board = document.toObject(Board::class.java)
                 if (board != null) {
+                    board.documentID = document.id
                     activity.boardDetails(board)
                 }
             }
@@ -141,4 +142,19 @@ class FirestoreHandler {
                 activity.hideProgressDialog()
             }
     }
+
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+        val taskListHashMap = HashMap<String, Any>()
+        taskListHashMap[Constants.TASK_LIST] = board.taskList
+        fireStore.collection(Constants.BOARDS_COLLECTION_KEY)
+            .document(board.documentID)
+            .update(taskListHashMap)
+            .addOnSuccessListener {
+                activity.addUpdateTaskListSuccess()
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+            }
+    }
+
+
 }

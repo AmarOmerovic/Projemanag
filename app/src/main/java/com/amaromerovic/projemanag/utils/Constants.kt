@@ -13,6 +13,7 @@ object Constants {
     const val BOARDS_COLLECTION_KEY = "Boards"
     const val ASSIGNED_TO = "assignedTo"
     const val DOCUMENT_ID = "documentID"
+    const val TASK_LIST = "taskList"
 
 
     fun getFileExtension(activity: Activity, uri: Uri?): String? {

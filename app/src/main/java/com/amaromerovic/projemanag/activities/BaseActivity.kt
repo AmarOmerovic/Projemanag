@@ -15,11 +15,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat
-import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivityBaseBinding
 import com.amaromerovic.projemanag.databinding.ProgressDialogBinding
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 
@@ -71,17 +68,6 @@ open class BaseActivity : AppCompatActivity() {
         }, 2000)
     }
 
-    fun showErrorSnackBar(string: String) {
-        val snackBar = Snackbar.make(binding.root, string, Snackbar.LENGTH_LONG)
-        val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(
-            ContextCompat.getColor(
-                this@BaseActivity,
-                R.color.snackbar_error_color
-            )
-        )
-        snackBar.show()
-    }
 
     fun isInputEmpty(
         textInputLayout: TextInputLayout,

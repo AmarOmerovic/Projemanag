@@ -116,7 +116,7 @@
                     tools:text="Text" />
 
                 <ImageButton
-                    android:id="@+id/editList"
+                    android:id="@+id/editItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
@@ -128,6 +128,7 @@
                     tools:ignore="DuplicateSpeakableTextCheck,ImageContrastCheck" />
 
                 <ImageButton
+                    android:id="@+id/deleteItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
@@ -202,6 +203,7 @@
                 android:id="@+id/recyclerViewCardList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/sign_in_sign_up_min_height"
                 android:layout_margin="@dimen/card_list_margin" />
 
             <androidx.cardview.widget.CardView
