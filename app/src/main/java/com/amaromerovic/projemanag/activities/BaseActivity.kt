@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
+import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivityBaseBinding
 import com.amaromerovic.projemanag.databinding.ProgressDialogBinding
 import com.google.android.material.textfield.TextInputLayout
@@ -31,6 +32,20 @@ open class BaseActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+
+    fun noInternetConnectionDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("No internet connection!")
+        builder.setMessage("Please check you internet connection before using the app. Bad or no connection at all can cause major problems.")
+        builder.setIcon(R.drawable.alert)
+        builder.setPositiveButton("I understand") { dialogInterface, _ ->
+            dialogInterface.dismiss()
+            finish()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
 
     fun showProgressDialog() {
         progressDialog = Dialog(this)

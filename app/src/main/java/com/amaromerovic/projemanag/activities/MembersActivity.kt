@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.adapter.MemberListAdapter
@@ -16,6 +17,16 @@ import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.models.Board
 import com.amaromerovic.projemanag.models.User
 import com.amaromerovic.projemanag.utils.Constants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.IOException
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.URL
 
 class MembersActivity : BaseActivity() {
     private lateinit var binding: ActivityMembersBinding
@@ -101,6 +112,8 @@ class MembersActivity : BaseActivity() {
         hideProgressDialog()
         assignedMembersList.add(user)
         setUpMembersList(assignedMembersList)
+
+        user.fcmToken?.let { SendNotificationToUser(boardDetails.name, it).startApiCall() }
     }
 
     private fun dialogSearchMember() {
@@ -128,6 +141,99 @@ class MembersActivity : BaseActivity() {
         }
 
         dialog.show()
+    }
+
+    private inner class SendNotificationToUser(val boardName: String, val token: String) {
+
+        fun startApiCall() {
+            showProgressDialog()
+            lifecycleScope.launch(Dispatchers.IO) {
+                makeApiCall()
+            }
+            afterCallFinish()
+        }
+
+        private fun makeApiCall(): String {
+            var result: String
+            var connection: HttpURLConnection? = null
+
+            try {
+                val url = URL(Constants.FCM_BASE_URL)
+                connection = url.openConnection() as HttpURLConnection
+                connection.doInput = true
+                connection.doOutput = true
+                connection.instanceFollowRedirects = false
+                connection.requestMethod = "POST"
+
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.setRequestProperty("charset", "utf-8")
+                connection.setRequestProperty("Accept", "application/json")
+
+                connection.setRequestProperty(
+                    Constants.FCM_AUTHORIZATION,
+                    "${Constants.FCM_KEY}=${Constants.FCM_SERVER_KEY}"
+                )
+
+                connection.useCaches = false
+
+                val writeDataOutputStream = DataOutputStream(connection.outputStream)
+                val jsonRequest = JSONObject()
+                val dataObject = JSONObject()
+                dataObject.put(Constants.FCM_KEY_TITLE, "Assigned to the Board $boardName")
+                dataObject.put(
+                    Constants.FCM_KEY_MESSAGE,
+                    "You have been assigned to the Board $boardName by ${assignedMembersList[0].name}"
+                )
+
+                jsonRequest.put(Constants.FCM_KEY_DATA, dataObject)
+                jsonRequest.put(Constants.FCM_KEY_TO, token)
+
+
+                writeDataOutputStream.writeBytes(jsonRequest.toString())
+                writeDataOutputStream.flush()
+                writeDataOutputStream.close()
+
+                val httpResult: Int = connection.responseCode
+
+                if (httpResult == HttpURLConnection.HTTP_OK) {
+                    val inputStream = connection.inputStream
+
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    val stringBuilder: StringBuilder = StringBuilder()
+                    var line: String?
+
+                    try {
+                        while (reader.readLine().also { line = it } != null) {
+                            stringBuilder.append(line + "\n")
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    } finally {
+                        try {
+                            inputStream.close()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    result = stringBuilder.toString()
+                } else {
+                    result = connection.responseMessage
+                }
+
+            } catch (e: SocketTimeoutException) {
+                result = "Connection Timeout"
+            } catch (e: Exception) {
+                result = "Error : " + e.message
+            } finally {
+                connection?.disconnect()
+            }
+            return result
+        }
+
+
+        private fun afterCallFinish() {
+            hideProgressDialog()
+        }
     }
 
 }

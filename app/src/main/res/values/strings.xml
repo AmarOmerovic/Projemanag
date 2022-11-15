@@ -41,5 +41,6 @@
     <string name="select_due_date">Select Due Date</string>
     <string name="delete_card">Delete Card</string>
     <string name="checked">Check</string>
+    <string name="default_notification_channel_id">projemanag_notification_channel_id</string>
 
 </resources>

@@ -45,7 +45,6 @@ class FirestoreHandler {
             .get()
             .addOnSuccessListener {
                 val loggedInUser = it.toObject(User::class.java)
-
                 when (activity) {
                     is SignInActivity -> {
                         if (loggedInUser != null) {
@@ -80,15 +79,21 @@ class FirestoreHandler {
             }
     }
 
-    fun updateUserProfileData(activity: ProfileActivity, userHashMap: HashMap<String, Any>) {
+    fun updateUserProfileData(activity: Activity, userHashMap: HashMap<String, Any>) {
         fireStore.collection(Constants.USERS_COLLECTION_KEY)
             .document(getCurrentUserUID())
             .update(userHashMap)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Profile updated successfully.", Toast.LENGTH_LONG).show()
-                activity.profileUpdateSuccess()
+                when (activity) {
+                    is MainActivity -> activity.tokenUpdateSuccess()
+                    is ProfileActivity -> activity.profileUpdateSuccess()
+                }
             }.addOnFailureListener {
-                activity.hideProgressDialog()
+                when (activity) {
+                    is MainActivity -> activity.hideProgressDialog()
+                    is ProfileActivity -> activity.hideProgressDialog()
+                }
                 Toast.makeText(activity, "Profile update error!", Toast.LENGTH_LONG).show()
 
             }

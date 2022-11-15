@@ -6,13 +6,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewTreeObserver
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.amaromerovic.projemanag.utils.Constants
 import com.amaromerovic.projemanag.databinding.ActivityStartBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
+import com.amaromerovic.projemanag.utils.Constants
 
-class StartActivity : AppCompatActivity() {
+class StartActivity : BaseActivity() {
     private lateinit var binding: ActivityStartBinding
     private var isReady = false
     private var duration = 2500L
@@ -47,17 +46,27 @@ class StartActivity : AppCompatActivity() {
             })
 
 
+        if (!Constants.isNetworkAvailable(this@StartActivity)) {
+            noInternetConnectionDialog()
+        }
+
         binding.signUp.setOnClickListener {
             val intent = Intent(this@StartActivity, SignUpActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(com.amaromerovic.projemanag.R.anim.slide_in_right,com.amaromerovic.projemanag.R.anim.slide_out_left)
+            overridePendingTransition(
+                com.amaromerovic.projemanag.R.anim.slide_in_right,
+                com.amaromerovic.projemanag.R.anim.slide_out_left
+            )
             finish()
         }
 
         binding.signIn.setOnClickListener {
             val intent = Intent(this@StartActivity, SignInActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(com.amaromerovic.projemanag.R.anim.slide_in_right,com.amaromerovic.projemanag.R.anim.slide_out_left)
+            overridePendingTransition(
+                com.amaromerovic.projemanag.R.anim.slide_in_right,
+                com.amaromerovic.projemanag.R.anim.slide_out_left
+            )
             finish()
         }
     }

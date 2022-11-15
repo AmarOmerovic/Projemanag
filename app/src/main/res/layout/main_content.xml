@@ -18,14 +18,21 @@
         app:cardElevation="@dimen/card_view_elevation_radius"
         app:cardUseCompatPadding="false">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
+            app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/darkBlue"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/recycler_view_padding"
-            android:visibility="gone"
-            tools:listitem="@layout/board_item" />
+            android:layout_height="match_parent">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/recycler_view_padding"
+                android:visibility="gone"
+                tools:listitem="@layout/board_item" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/noBoardsText"

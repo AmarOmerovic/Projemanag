@@ -1,7 +1,9 @@
 package com.amaromerovic.projemanag.activities
 
+import android.app.DatePickerDialog
 import android.content.res.Resources
 import android.graphics.Color
+import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -20,6 +22,8 @@ import com.amaromerovic.projemanag.models.*
 import com.amaromerovic.projemanag.utils.Constants
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.model.ColorShape
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class CardDetailsActivity : BaseActivity() {
@@ -29,6 +33,7 @@ class CardDetailsActivity : BaseActivity() {
     private var cardListPosition = -1
     private var labelColor = ""
     private lateinit var assignedMembersDetailsList: ArrayList<User>
+    private var selectedDueDateMilliseconds: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +96,20 @@ class CardDetailsActivity : BaseActivity() {
             membersListDialog()
         }
 
+        selectedDueDateMilliseconds =
+            boardDetails.taskList[taskListPosition].cards[cardListPosition].dueDate
+
+        if (selectedDueDateMilliseconds > 0) {
+            val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val selectedDate = sdf.format(Date(selectedDueDateMilliseconds))
+
+            binding.selectDueDate.text = selectedDate
+        }
+
+        binding.selectDueDate.setOnClickListener {
+            showDatePicker()
+        }
+
         setUpSelectedMembersList()
     }
 
@@ -119,7 +138,9 @@ class CardDetailsActivity : BaseActivity() {
         val card = Card(
             binding.nameCardDetails.text.toString(),
             boardDetails.taskList[taskListPosition].cards[cardListPosition].createdBy,
-            boardDetails.taskList[taskListPosition].cards[cardListPosition].assignedTo, labelColor
+            boardDetails.taskList[taskListPosition].cards[cardListPosition].assignedTo,
+            labelColor,
+            selectedDueDateMilliseconds
         )
 
         boardDetails.taskList[taskListPosition].cards[cardListPosition] = card
@@ -293,6 +314,33 @@ class CardDetailsActivity : BaseActivity() {
             binding.selectedMembersList.visibility = View.GONE
         }
 
+    }
+
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+
+
+        val dateSetListener: DatePickerDialog.OnDateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, day)
+
+                selectedDueDateMilliseconds = calendar.timeInMillis
+
+                binding.selectDueDate.text =
+                    SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(
+                        calendar.time
+                    ).toString()
+            }
+
+        DatePickerDialog(
+            this@CardDetailsActivity,
+            dateSetListener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
 

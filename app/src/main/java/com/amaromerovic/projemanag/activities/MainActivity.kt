@@ -1,6 +1,8 @@
 package com.amaromerovic.projemanag.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.adapter.BoardListAdapter
@@ -20,12 +23,14 @@ import com.amaromerovic.projemanag.utils.Constants
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewHeader: View
     private lateinit var navViewHeaderBinding: NavHeaderMainBinding
     private lateinit var userName: String
+    private lateinit var sharedPreferences: SharedPreferences
 
     private val startUpdateActivityAndGetResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -48,7 +53,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         navViewHeaderBinding = NavHeaderMainBinding.bind(viewHeader)
         setContentView(binding.root)
 
-        FirestoreHandler().loadUserData(this@MainActivity, true)
+        if (!Constants.isNetworkAvailable(this@MainActivity)) {
+            noInternetConnectionDialog()
+        }
+
+            sharedPreferences =
+            this.getSharedPreferences(Constants.PROJEMANAG_PREFERENCES, Context.MODE_PRIVATE)
+
+        val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+
+        if (tokenUpdated) {
+            showProgressDialog()
+            FirestoreHandler().loadUserData(this@MainActivity, true)
+        } else {
+            FirebaseMessaging.getInstance().token.addOnSuccessListener { result ->
+                updateFCMToken(result)
+            }
+        }
 
         setSupportActionBar(binding.appBarId.toolbarMainActivity)
         binding.appBarId.toolbarMainActivity.setNavigationIcon(R.drawable.ic_action_nav_menu)
@@ -75,6 +96,39 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
+
+        binding.appBarId.mainContentLayout.refreshLayout.setOnRefreshListener {
+            binding.appBarId.mainContentLayout.refreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(
+                    this@MainActivity,
+                    R.color.darkBlue
+                ),
+                ContextCompat.getColor(this@MainActivity, R.color.darkBlue),
+                ContextCompat.getColor(this@MainActivity, R.color.darkBlue)
+            )
+            if (binding.appBarId.mainContentLayout.refreshLayout.isRefreshing) {
+                binding.appBarId.mainContentLayout.refreshLayout.isRefreshing = false
+            }
+            showProgressDialog()
+            FirestoreHandler().getBoardList(this)
+        }
+    }
+
+    fun tokenUpdateSuccess() {
+        hideProgressDialog()
+
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
+        editor.apply()
+        showProgressDialog()
+        FirestoreHandler().loadUserData(this, true)
+    }
+
+    private fun updateFCMToken(token: String) {
+        val userHashMap = HashMap<String, Any>()
+        userHashMap[Constants.FCM_TOKEN] = token
+        showProgressDialog()
+        FirestoreHandler().updateUserProfileData(this@MainActivity, userHashMap)
     }
 
     fun populateBoardsListToUI(boards: ArrayList<Board>) {
@@ -108,7 +162,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User, readBoardList: Boolean) {
-
+        hideProgressDialog()
         userName = user.name.toString()
 
         Glide
@@ -159,6 +213,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             }
             R.id.singOut -> {
+                sharedPreferences.edit().clear().apply()
                 FirebaseAuth.getInstance().signOut()
                 goBack()
             }

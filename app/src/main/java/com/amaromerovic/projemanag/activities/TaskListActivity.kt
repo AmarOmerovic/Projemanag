@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.adapter.TaskListAdapter
@@ -47,6 +48,31 @@ class TaskListActivity : BaseActivity() {
             showProgressDialog()
             FirestoreHandler().getBoardDetails(this, boardDocumentID)
         }
+
+        binding.refreshLayout.setOnRefreshListener {
+            binding.refreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(
+                    this@TaskListActivity,
+                    R.color.darkBlue
+                ),
+                ContextCompat.getColor(this@TaskListActivity, R.color.darkBlue),
+                ContextCompat.getColor(this@TaskListActivity, R.color.darkBlue)
+            )
+            if (binding.refreshLayout.isRefreshing) {
+                binding.refreshLayout.isRefreshing = false
+            }
+            showProgressDialog()
+            FirestoreHandler().getBoardDetails(this@TaskListActivity, boardDocumentID)
+        }
+    }
+
+    fun updateCardsInTaskList(taskListPosition: Int, cards: ArrayList<Card>) {
+        myBoardDetails.taskList.removeAt(myBoardDetails.taskList.size - 1)
+
+        myBoardDetails.taskList[taskListPosition].cards = cards
+
+        showProgressDialog()
+        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
     }
 
     fun boardMembersDetailsList(list: ArrayList<User>) {
