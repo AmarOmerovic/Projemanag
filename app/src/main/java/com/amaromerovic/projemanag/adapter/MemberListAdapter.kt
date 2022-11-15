@@ -34,6 +34,7 @@ class MemberListAdapter(private val context: Context, private val list: ArrayLis
             .fitCenter()
             .placeholder(R.drawable.ic_user_place_holder)
             .into(holder.binding.memberImage)
+
     }
 
     override fun getItemCount(): Int {
@@ -41,4 +42,5 @@ class MemberListAdapter(private val context: Context, private val list: ArrayLis
     }
 
     class ViewHolder(val binding: MemberItemBinding) : RecyclerView.ViewHolder(binding.root)
+
 }

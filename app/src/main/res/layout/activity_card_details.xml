@@ -116,6 +116,14 @@
                     android:textSize="@dimen/card_details_action_text_size"
                     tools:ignore="TextContrastCheck" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/selectedMembersList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/card_details_value_marginTop"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

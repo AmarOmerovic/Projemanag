@@ -184,7 +184,7 @@ class FirestoreHandler {
             }
     }
 
-    fun getAssignedMembers(activity: MembersActivity, assignedTo: ArrayList<String>) {
+    fun getAssignedMembers(activity: Activity, assignedTo: ArrayList<String>) {
         fireStore.collection(Constants.USERS_COLLECTION_KEY)
             .whereIn(Constants.USER_ID, assignedTo)
             .get()
@@ -197,11 +197,18 @@ class FirestoreHandler {
                         usersList.add(user)
                     }
                 }
-
-                activity.setUpMembersList(usersList)
+                if (activity is MembersActivity) {
+                    activity.setUpMembersList(usersList)
+                } else if (activity is TaskListActivity) {
+                    activity.boardMembersDetailsList(usersList)
+                }
             }
             .addOnFailureListener {
-                activity.hideProgressDialog()
+                if (activity is MembersActivity) {
+                    activity.hideProgressDialog()
+                } else if (activity is TaskListActivity) {
+                    activity.hideProgressDialog()
+                }
                 Toast.makeText(
                     activity,
                     "There was a problem loading the members!",

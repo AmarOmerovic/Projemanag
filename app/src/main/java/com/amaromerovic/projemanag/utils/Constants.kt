@@ -20,6 +20,8 @@ object Constants {
     const val TASK_LIST_ITEM_POSITION = "task list item position"
     const val CARD_LIST_ITEM_POSITION = "card list item position"
     const val BOARD_MEMBERS_LIST: String = "Board members list"
+    const val SELECT = "Select"
+    const val UN_SELECT = "UnSelect"
 
     fun getFileExtension(activity: Activity, uri: Uri?): String? {
         return MimeTypeMap.getSingleton()

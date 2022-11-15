@@ -29,7 +29,7 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
         )
 
         val layoutParams = LinearLayout.LayoutParams(
-            (parent.width * 0.9).toInt(),
+            (parent.width * 0.8).toInt(),
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 

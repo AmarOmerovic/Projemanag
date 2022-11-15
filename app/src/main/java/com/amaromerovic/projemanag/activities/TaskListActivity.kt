@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.adapter.TaskListAdapter
 import com.amaromerovic.projemanag.databinding.ActivityTaskListBinding
@@ -20,7 +20,7 @@ class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
     private lateinit var myBoardDetails: Board
     private lateinit var boardDocumentID: String
-    private lateinit var assignedMemberDetailList: ArrayList<User>
+    lateinit var assignedMemberDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +49,27 @@ class TaskListActivity : BaseActivity() {
         }
     }
 
+    fun boardMembersDetailsList(list: ArrayList<User>) {
+        assignedMemberDetailList = list
+        hideProgressDialog()
+
+        val taskList = Task(resources.getString(R.string.add_list))
+        myBoardDetails.taskList.add(taskList)
+
+        binding.recyclerViewTaskList.layoutManager =
+            LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewTaskList.setHasFixedSize(false)
+        val adapter = TaskListAdapter(this@TaskListActivity, myBoardDetails.taskList)
+        binding.recyclerViewTaskList.adapter = adapter
+
+    }
 
     fun cardDetails(taskListPosition: Int, cardPosition: Int) {
         val intent = Intent(this@TaskListActivity, CardDetailsActivity::class.java)
         intent.putExtra(Constants.BOARD_DETAIL, myBoardDetails)
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST, assignedMemberDetailList)
         startActivity(intent)
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
@@ -83,14 +98,10 @@ class TaskListActivity : BaseActivity() {
         myBoardDetails = board
         binding.taskToolbarText.text = board.name
 
-        val taskList = Task(resources.getString(R.string.add_list))
-        board.taskList.add(taskList)
 
-        binding.recyclerViewTaskList.layoutManager =
-            GridLayoutManager(this@TaskListActivity, 2, GridLayoutManager.HORIZONTAL, false)
-        binding.recyclerViewTaskList.setHasFixedSize(false)
-        val adapter = TaskListAdapter(this@TaskListActivity, board.taskList)
-        binding.recyclerViewTaskList.adapter = adapter
+
+        showProgressDialog()
+        FirestoreHandler().getAssignedMembers(this@TaskListActivity, myBoardDetails.assignedTo)
     }
 
     fun addUpdateTaskListSuccess() {

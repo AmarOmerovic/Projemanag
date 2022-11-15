@@ -23,37 +23,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|start"
-            tools:text="Task List"
             android:textColor="@color/white"
             android:textSize="@dimen/toolbar_text_size"
             android:textStyle="bold"
-            tools:ignore="TextContrastCheck" />
+            tools:ignore="TextContrastCheck"
+            tools:text="Task List" />
     </androidx.appcompat.widget.Toolbar>
 
-        <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="#00FFFFFF"
+        app:cardCornerRadius="@dimen/card_view_corner_radius"
+        app:cardElevation="@dimen/card_view_elevation_radius"
+        app:cardUseCompatPadding="false">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="#00FFFFFF"
-            app:cardCornerRadius="@dimen/card_view_corner_radius"
-            app:cardElevation="@dimen/card_view_elevation_radius"
-            app:cardUseCompatPadding="false">
+            android:layout_height="wrap_content">
 
-            <ScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTaskList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:padding="@dimen/recycler_view_padding"
+                android:visibility="visible"
+                tools:itemCount="10"
+                tools:listitem="@layout/task_item" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewTaskList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/recycler_view_padding"
-                    tools:listitem="@layout/task_item"
-                    android:visibility="visible"/>
-
-            </ScrollView>
+        </ScrollView>
 
 
-
-        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </androidx.appcompat.widget.LinearLayoutCompat>
 
