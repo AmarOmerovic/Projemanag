@@ -38,13 +38,21 @@
             app:cardElevation="@dimen/card_view_elevation_radius"
             app:cardUseCompatPadding="false">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewTaskList"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/recycler_view_padding"
-                tools:listitem="@layout/task_item"
-                android:visibility="visible"/>
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewTaskList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/recycler_view_padding"
+                    tools:listitem="@layout/task_item"
+                    android:visibility="visible"/>
+
+            </ScrollView>
+
+
 
         </androidx.cardview.widget.CardView>
 </androidx.appcompat.widget.LinearLayoutCompat>

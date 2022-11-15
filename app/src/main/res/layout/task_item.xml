@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:cardCornerRadius="@dimen/card_view_corner_radius"
     app:cardElevation="@dimen/task_item_card_elevation"
     app:cardUseCompatPadding="true">
@@ -149,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/add_task_list_name_margin"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/add_task_list_name_card_corner_radius"
                 app:cardElevation="@dimen/add_task_list_name_card_elevation"
                 tools:visibility="visible">
@@ -209,7 +209,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/add_task_list_name_margin"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/add_task_list_name_card_corner_radius"
                 app:cardElevation="@dimen/add_task_list_name_card_elevation"
                 tools:visibility="visible">
@@ -270,7 +270,7 @@
                 android:textColor="@color/darkBlue"
                 android:textSize="@dimen/task_item_add_list_text_size"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:ignore="TextContrastCheck"
                 tools:visibility="visible" />
 

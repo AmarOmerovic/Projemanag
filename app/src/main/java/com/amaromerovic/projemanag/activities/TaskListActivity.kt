@@ -2,10 +2,14 @@ package com.amaromerovic.projemanag.activities
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.amaromerovic.projemanag.R
+import com.amaromerovic.projemanag.adapter.TaskListAdapter
 import com.amaromerovic.projemanag.databinding.ActivityTaskListBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.models.Board
+import com.amaromerovic.projemanag.models.Task
 import com.amaromerovic.projemanag.utils.Constants
 
 class TaskListActivity : BaseActivity() {
@@ -42,5 +46,30 @@ class TaskListActivity : BaseActivity() {
     fun boardDetails(board: Board) {
         hideProgressDialog()
         binding.taskToolbarText.text = board.name
+
+        val taskList = Task(resources.getString(R.string.add_list))
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+        board.taskList.add(taskList)
+
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(binding.recyclerViewTaskList)
+
+        binding.recyclerViewTaskList.layoutManager =
+            GridLayoutManager(this@TaskListActivity, 3, GridLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewTaskList.setHasFixedSize(false)
+        val adapter = TaskListAdapter(this@TaskListActivity, board.taskList)
+        binding.recyclerViewTaskList.adapter = adapter
     }
 }
