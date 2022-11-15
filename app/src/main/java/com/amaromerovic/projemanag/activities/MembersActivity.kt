@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
@@ -81,7 +82,25 @@ class MembersActivity : BaseActivity() {
     }
 
     fun memberDetails(user: User) {
-        user.id?.let { boardDetails.assignedTo.add(it) }
+        user.id?.let {
+            if (boardDetails.assignedTo.contains(it)) {
+                hideProgressDialog()
+                Toast.makeText(
+                    this@MembersActivity,
+                    "The user is already a member of this board!",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                boardDetails.assignedTo.add(it)
+                FirestoreHandler().assignMemberToBoard(this, boardDetails, user)
+            }
+        }
+    }
+
+    fun memberAssignSuccess(user: User) {
+        hideProgressDialog()
+        assignedMembersList.add(user)
+        setUpMembersList(assignedMembersList)
     }
 
     private fun dialogSearchMember() {
@@ -100,6 +119,7 @@ class MembersActivity : BaseActivity() {
                     this@MembersActivity,
                     dialogBinding.emailSearchMember.text.toString()
                 )
+                dialog.dismiss()
             }
         }
 

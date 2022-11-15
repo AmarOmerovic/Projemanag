@@ -17,7 +17,10 @@ import com.amaromerovic.projemanag.utils.Constants
 
 class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
-    private lateinit var boardDetails: Board
+    private lateinit var myBoardDetails: Board
+    private lateinit var boardDocumentID: String
+    private var firstTime = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +42,11 @@ class TaskListActivity : BaseActivity() {
             }
         })
 
-        val boardDocumentID: String? = intent.getStringExtra(Constants.DOCUMENT_ID)
-        if (boardDocumentID?.isNotEmpty() == true) {
+        if (intent.hasExtra(Constants.DOCUMENT_ID)) {
+            boardDocumentID = intent.getStringExtra(Constants.DOCUMENT_ID)!!
             showProgressDialog()
             FirestoreHandler().getBoardDetails(this, boardDocumentID)
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -56,7 +58,7 @@ class TaskListActivity : BaseActivity() {
         when (item.itemId) {
             R.id.actionMembers -> {
                 val intent = Intent(this@TaskListActivity, MembersActivity::class.java)
-                intent.putExtra(Constants.BOARD_DETAIL, boardDetails)
+                intent.putExtra(Constants.BOARD_DETAIL, myBoardDetails)
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
@@ -67,7 +69,7 @@ class TaskListActivity : BaseActivity() {
     fun boardDetails(board: Board) {
         hideProgressDialog()
 
-        boardDetails = board
+        myBoardDetails = board
         binding.taskToolbarText.text = board.name
 
         val taskList = Task(resources.getString(R.string.add_list))
@@ -84,55 +86,63 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
 
         showProgressDialog()
-        FirestoreHandler().getBoardDetails(this@TaskListActivity, boardDetails.documentID)
+        FirestoreHandler().getBoardDetails(this@TaskListActivity, myBoardDetails.documentID)
     }
 
     fun createTaskList(taskListName: String) {
         val task = Task(taskListName, FirestoreHandler().getCurrentUserUID())
-        boardDetails.taskList.add(0, task)
-        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        myBoardDetails.taskList.add(0, task)
+        myBoardDetails.taskList.removeAt(myBoardDetails.taskList.size - 1)
 
         showProgressDialog()
-        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, boardDetails)
+        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
     }
 
     fun updateTaskList(position: Int, listName: String, model: Task) {
         val task = Task(listName, model.createdBy, model.cards)
-        boardDetails.taskList[position] = task
-        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        myBoardDetails.taskList[position] = task
+        myBoardDetails.taskList.removeAt(myBoardDetails.taskList.size - 1)
 
         showProgressDialog()
-        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, boardDetails)
+        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
     }
 
     fun deleteTaskList(position: Int) {
-        boardDetails.taskList.removeAt(position)
-        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        myBoardDetails.taskList.removeAt(position)
+        myBoardDetails.taskList.removeAt(myBoardDetails.taskList.size - 1)
 
         showProgressDialog()
-        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, boardDetails)
+        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
     }
 
     fun addCardToTaskList(position: Int, cardName: String) {
-        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        myBoardDetails.taskList.removeAt(myBoardDetails.taskList.size - 1)
 
         val cardAssignedUsersList: ArrayList<String> = ArrayList()
         cardAssignedUsersList.add(FirestoreHandler().getCurrentUserUID())
 
         val card = Card(cardName, FirestoreHandler().getCurrentUserUID(), cardAssignedUsersList)
 
-        val cardsList = boardDetails.taskList[position].cards
+        val cardsList = myBoardDetails.taskList[position].cards
         cardsList.add(card)
 
         val task = Task(
-            boardDetails.taskList[position].title,
-            boardDetails.taskList[position].createdBy,
+            myBoardDetails.taskList[position].title,
+            myBoardDetails.taskList[position].createdBy,
             cardsList
         )
 
-        boardDetails.taskList[position] = task
+        myBoardDetails.taskList[position] = task
 
         showProgressDialog()
-        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, boardDetails)
+        FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::myBoardDetails.isInitialized) {
+            showProgressDialog()
+            FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
+        }
     }
 }

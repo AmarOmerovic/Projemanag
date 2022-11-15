@@ -105,7 +105,11 @@ class FirestoreHandler {
             }
             .addOnFailureListener {
                 activity.hideProgressDialog()
-                Toast.makeText(activity, "There was a problem creating the board!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    "There was a problem creating the board!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -125,7 +129,11 @@ class FirestoreHandler {
             }
             .addOnFailureListener {
                 activity.hideProgressDialog()
-                Toast.makeText(activity, "There was a problem displaying the boards!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    "There was a problem displaying the boards!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -142,7 +150,11 @@ class FirestoreHandler {
             }
             .addOnFailureListener {
                 activity.hideProgressDialog()
-                Toast.makeText(activity, "There was a problem getting the board details!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    "There was a problem getting the board details!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -156,7 +168,11 @@ class FirestoreHandler {
                 activity.addUpdateTaskListSuccess()
             }.addOnFailureListener {
                 activity.hideProgressDialog()
-                Toast.makeText(activity, "There was a problem updating the task!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    "There was a problem updating the task!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -205,6 +221,21 @@ class FirestoreHandler {
                 activity.hideProgressDialog()
                 Toast.makeText(activity, "Error searching the member!", Toast.LENGTH_LONG).show()
 
+            }
+    }
+
+    fun assignMemberToBoard(activity: MembersActivity, board: Board, user: User) {
+
+        val assignedTo = HashMap<String, Any>()
+        assignedTo[Constants.ASSIGNED_TO] = board.assignedTo
+        fireStore.collection(Constants.BOARDS_COLLECTION_KEY)
+            .document(board.documentID)
+            .update(assignedTo)
+            .addOnSuccessListener {
+                activity.memberAssignSuccess(user)
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "There was a problem assigning the user!", Toast.LENGTH_LONG).show()
             }
     }
 
