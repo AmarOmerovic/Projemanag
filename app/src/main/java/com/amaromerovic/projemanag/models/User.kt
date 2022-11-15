@@ -1,4 +1,4 @@
-package com.amaromerovic.projemanag.model
+package com.amaromerovic.projemanag.models
 
 import android.os.Parcel
 import android.os.Parcelable

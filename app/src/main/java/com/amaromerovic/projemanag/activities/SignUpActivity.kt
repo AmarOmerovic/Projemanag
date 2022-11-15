@@ -8,7 +8,7 @@ import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.utils.Constants
 import com.amaromerovic.projemanag.databinding.ActivitySignUpBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
-import com.amaromerovic.projemanag.model.User
+import com.amaromerovic.projemanag.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

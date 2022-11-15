@@ -2,11 +2,9 @@ package com.amaromerovic.projemanag.firebase
 
 import android.app.Activity
 import android.widget.Toast
-import com.amaromerovic.projemanag.activities.MainActivity
-import com.amaromerovic.projemanag.activities.ProfileActivity
-import com.amaromerovic.projemanag.activities.SignInActivity
-import com.amaromerovic.projemanag.activities.SignUpActivity
-import com.amaromerovic.projemanag.model.User
+import com.amaromerovic.projemanag.activities.*
+import com.amaromerovic.projemanag.models.Board
+import com.amaromerovic.projemanag.models.User
 import com.amaromerovic.projemanag.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +39,7 @@ class FirestoreHandler {
         return currentUserUID
     }
 
-    fun loadUserData(activity: Activity) {
+    fun loadUserData(activity: Activity, readBoardList: Boolean = false) {
         fireStore.collection(Constants.USERS_COLLECTION_KEY)
             .document(getCurrentUserUID())
             .get()
@@ -56,7 +54,7 @@ class FirestoreHandler {
                     }
                     is MainActivity -> {
                         if (loggedInUser != null) {
-                            activity.updateNavigationUserDetails(loggedInUser)
+                            activity.updateNavigationUserDetails(loggedInUser, readBoardList)
                         }
                     }
 
@@ -93,6 +91,39 @@ class FirestoreHandler {
                 activity.hideProgressDialog()
                 Toast.makeText(activity, "Profile update error!", Toast.LENGTH_LONG).show()
 
+            }
+    }
+
+
+    fun createBoard(activity: CreateBoardActivity, board: Board) {
+        fireStore.collection(Constants.BOARDS_COLLECTION_KEY)
+            .document()
+            .set(board, SetOptions.merge())
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Board created successfully!", Toast.LENGTH_LONG).show()
+                activity.boardCreatedSuccessfully()
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+            }
+    }
+
+    fun getBoardList(activity: MainActivity) {
+        fireStore.collection(Constants.BOARDS_COLLECTION_KEY)
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserUID())
+            .get()
+            .addOnSuccessListener { document ->
+                val boards = ArrayList<Board>()
+                document.forEach {
+                    val board = it.toObject(Board::class.java)
+                    board.documentID = it.id
+                    boards.add(board)
+                }
+
+                activity.populateBoardsListToUI(boards)
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
             }
     }
 }

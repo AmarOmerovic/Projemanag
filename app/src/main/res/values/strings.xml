@@ -20,5 +20,7 @@
     <string name="create">Create</string>
     <string name="board_name">Board Name</string>
     <string name="add_board">Add Board</string>
+    <string name="no_boards_available">No Boards available!</string>
+    <string name="board_image">Board Image</string>
 
 </resources>

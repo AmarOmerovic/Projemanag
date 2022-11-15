@@ -1,21 +1,17 @@
 package com.amaromerovic.projemanag.activities
 
 import android.Manifest
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.databinding.ActivityProfileBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
-import com.amaromerovic.projemanag.model.User
+import com.amaromerovic.projemanag.models.User
 import com.amaromerovic.projemanag.utils.Constants
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
@@ -82,7 +78,7 @@ class ProfileActivity : BaseActivity() {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
             ) {
-                showRationalDialogForPermissions("Files and media")
+                showRationalDialogForPermissions(this@ProfileActivity,"Files and media")
             } else {
                 readStoragePerm.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
@@ -131,7 +127,7 @@ class ProfileActivity : BaseActivity() {
         if (selectedImageURI != null) {
             val storage = FirebaseStorage.getInstance()
                 .reference.child(
-                    "Projemanag_user_image" + System.currentTimeMillis() + "." + getFileExtension(
+                    "Projemanag_user_image" + System.currentTimeMillis() + "." + Constants.getFileExtension(this@ProfileActivity,
                         selectedImageURI
                     )
                 )
@@ -156,31 +152,8 @@ class ProfileActivity : BaseActivity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
-    private fun getFileExtension(uri: Uri?): String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
-    }
 
-    private fun showRationalDialogForPermissions(permissionName: String) {
-        AlertDialog.Builder(this@ProfileActivity)
-            .setTitle("Open Settings")
-            .setMessage("It looks like you have turned off the required permission for this feature. It can be enabled under the Applications Settings/Permissions/$permissionName.")
-            .setPositiveButton("Go to settings") { _, _ ->
-                try {
-                    goToSettings()
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }.setNegativeButton("Cancel") { dialogInterface, _ ->
-                dialogInterface.dismiss()
-            }.show()
-    }
 
-    private fun goToSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        val uri = Uri.fromParts("package", packageName, null)
-        intent.data = uri
-        startActivity(intent)
-    }
 
     private fun openStorage() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)

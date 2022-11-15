@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/item_board_content_margin_bottom"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:padding="@dimen/item_board_content_padding">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/itemImage"
+            android:layout_width="@dimen/item_board_image_size"
+            android:layout_height="@dimen/item_board_image_size"
+            android:contentDescription="@string/board_name"
+            android:src="@drawable/ic_user_place_holder"
+            app:civ_border_color="@color/darkBlue"
+            app:civ_border_width="@dimen/item_board_image_circular_border_width" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/item_board_name_layout_margin_start"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/boardName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/board_name"
+                android:textColor="@color/darkBlue"
+                android:textSize="@dimen/item_board_name_text_size" />
+
+            <TextView
+                android:id="@+id/createdBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/darkBlue"
+                android:textSize="@dimen/item_board_created_by_text_size"
+                tools:text="Created by" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_board_line_height"
+        android:layout_marginStart="@dimen/item_board_line_margin_left_right"
+        android:layout_marginEnd="@dimen/item_board_line_margin_left_right"
+        android:background="@color/darkBlue" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+

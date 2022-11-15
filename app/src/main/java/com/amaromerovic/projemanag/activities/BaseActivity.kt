@@ -1,12 +1,18 @@
 package com.amaromerovic.projemanag.activities
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
@@ -68,7 +74,12 @@ open class BaseActivity : AppCompatActivity() {
     fun showErrorSnackBar(string: String) {
         val snackBar = Snackbar.make(binding.root, string, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(this@BaseActivity, R.color.snackbar_error_color))
+        snackBarView.setBackgroundColor(
+            ContextCompat.getColor(
+                this@BaseActivity,
+                R.color.snackbar_error_color
+            )
+        )
         snackBar.show()
     }
 
@@ -84,5 +95,23 @@ open class BaseActivity : AppCompatActivity() {
             textInputLayout.isErrorEnabled = false
             false
         }
+    }
+
+    fun showRationalDialogForPermissions(context: Context, permissionName: String) {
+        AlertDialog.Builder(context)
+            .setTitle("Open Settings")
+            .setMessage("It looks like you have turned off the required permission for this feature. It can be enabled under the Applications Settings/Permissions/$permissionName.")
+            .setPositiveButton("Go to settings") { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }.setNegativeButton("Cancel") { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }.show()
     }
 }

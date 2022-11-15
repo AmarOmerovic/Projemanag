@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/board_image_size"
                     android:layout_marginTop="@dimen/margin_top_circle_image"
-                    android:contentDescription="@string/profile_image"
+                    android:contentDescription="@string/board_image"
                     android:src="@drawable/ic_board_place_holder"
                     app:civ_border_color="@color/darkBlue"
                     app:civ_border_width="@dimen/nav_image_circular_border_width" />
@@ -74,7 +74,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/update"
+                    android:id="@+id/create"
                     style="@style/sign_in_up_button_in_activities"
                     android:text="@string/create"
                     tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />

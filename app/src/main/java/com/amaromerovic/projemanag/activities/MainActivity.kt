@@ -8,27 +8,36 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amaromerovic.projemanag.R
+import com.amaromerovic.projemanag.adapter.BoardItemAdapter
 import com.amaromerovic.projemanag.databinding.ActivityMainBinding
 import com.amaromerovic.projemanag.databinding.NavHeaderMainBinding
 import com.amaromerovic.projemanag.firebase.FirestoreHandler
-import com.amaromerovic.projemanag.model.User
+import com.amaromerovic.projemanag.models.Board
+import com.amaromerovic.projemanag.models.User
 import com.amaromerovic.projemanag.utils.Constants
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewHeader: View
     private lateinit var navViewHeaderBinding: NavHeaderMainBinding
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var userName: String
 
     private val startUpdateActivityAndGetResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 FirestoreHandler().loadUserData(this)
+            }
+        }
+
+    private val startBoardListUpdate =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                FirestoreHandler().getBoardList(this)
             }
         }
 
@@ -38,6 +47,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         viewHeader = binding.navView.getHeaderView(0)
         navViewHeaderBinding = NavHeaderMainBinding.bind(viewHeader)
         setContentView(binding.root)
+
+        FirestoreHandler().loadUserData(this@MainActivity, true)
 
         setSupportActionBar(binding.appBarId.toolbarMainActivity)
         binding.appBarId.toolbarMainActivity.setNavigationIcon(R.drawable.ic_action_nav_menu)
@@ -55,21 +66,42 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         })
 
-        firestore = FirebaseFirestore.getInstance()
-
-        FirestoreHandler().loadUserData(this@MainActivity)
-
         binding.navView.setNavigationItemSelectedListener(this)
 
         binding.appBarId.createBoard.setOnClickListener {
             val intent = Intent(this@MainActivity, CreateBoardActivity::class.java)
-            startActivity(intent)
+            intent.putExtra(Constants.USER_NAME, userName)
+            startBoardListUpdate.launch(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
     }
 
-    fun updateNavigationUserDetails(user: User) {
+    fun populateBoardsListToUI(boards: ArrayList<Board>) {
+        hideProgressDialog()
+
+        if (boards.size > 0) {
+            binding.appBarId.mainContentLayout.recyclerView.visibility = View.VISIBLE
+            binding.appBarId.mainContentLayout.noBoardsText.visibility = View.GONE
+
+            binding.appBarId.mainContentLayout.recyclerView.layoutManager =
+                LinearLayoutManager(this)
+            binding.appBarId.mainContentLayout.recyclerView.setHasFixedSize(true)
+
+            val adapter = BoardItemAdapter(this@MainActivity, boards)
+            binding.appBarId.mainContentLayout.recyclerView.adapter = adapter
+        } else {
+            binding.appBarId.mainContentLayout.recyclerView.visibility = View.GONE
+            binding.appBarId.mainContentLayout.noBoardsText.visibility = View.VISIBLE
+        }
+
+
+    }
+
+    fun updateNavigationUserDetails(user: User, readBoardList: Boolean) {
+
+        userName = user.name.toString()
+
         Glide
             .with(this@MainActivity)
             .load(user.image)
@@ -78,6 +110,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .into(navViewHeaderBinding.circularImage)
 
         navViewHeaderBinding.userName.text = user.name.toString()
+
+        if (readBoardList) {
+            showProgressDialog()
+            FirestoreHandler().getBoardList(this)
+        }
 
     }
 
