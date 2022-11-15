@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.TaskListActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/taskListToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/darkBlue"
+        android:gravity="center"
+        tools:ignore="RtlSymmetry">
+
+        <TextView
+            android:id="@+id/taskToolbarText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            tools:text="Task List"
+            android:textColor="@color/white"
+            android:textSize="@dimen/toolbar_text_size"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+    </androidx.appcompat.widget.Toolbar>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#00FFFFFF"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation_radius"
+            app:cardUseCompatPadding="false">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTaskList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/recycler_view_padding"
+                tools:listitem="@layout/task_item"
+                android:visibility="visible"/>
+
+        </androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>
+

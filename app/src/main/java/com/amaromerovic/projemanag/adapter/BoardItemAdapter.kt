@@ -52,4 +52,9 @@ class BoardItemAdapter(private val context: Context, private val boards: ArrayLi
     interface OnBoardItemClick {
         fun onItemClick(position: Int, model: Board)
     }
+
+    fun onBoardItemClickListener(onBoardItemClick: OnBoardItemClick) {
+        this.onBoardItemClick = onBoardItemClick
+    }
+
 }

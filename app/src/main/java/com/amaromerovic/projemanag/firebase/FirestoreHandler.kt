@@ -126,4 +126,19 @@ class FirestoreHandler {
                 activity.hideProgressDialog()
             }
     }
+
+    fun getBoardDetails(activity: TaskListActivity, documentID: String) {
+        fireStore.collection(Constants.BOARDS_COLLECTION_KEY)
+            .document(documentID)
+            .get()
+            .addOnSuccessListener { document ->
+                val board = document.toObject(Board::class.java)
+                if (board != null) {
+                    activity.boardDetails(board)
+                }
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+            }
+    }
 }

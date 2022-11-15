@@ -90,6 +90,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             val adapter = BoardItemAdapter(this@MainActivity, boards)
             binding.appBarId.mainContentLayout.recyclerView.adapter = adapter
+
+            adapter.onBoardItemClickListener(object : BoardItemAdapter.OnBoardItemClick {
+                override fun onItemClick(position: Int, model: Board) {
+                    val intent = Intent(this@MainActivity, TaskListActivity::class.java)
+                    intent.putExtra(Constants.DOCUMENT_ID, model.documentID)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                }
+            })
         } else {
             binding.appBarId.mainContentLayout.recyclerView.visibility = View.GONE
             binding.appBarId.mainContentLayout.noBoardsText.visibility = View.VISIBLE

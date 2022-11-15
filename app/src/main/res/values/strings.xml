@@ -22,5 +22,10 @@
     <string name="add_board">Add Board</string>
     <string name="no_boards_available">No Boards available!</string>
     <string name="board_image">Board Image</string>
+    <string name="add_list">Add List</string>
+    <string name="image">Image</string>
+    <string name="list_name">List Name</string>
+    <string name="card_name">Card Name</string>
+    <string name="add_card">Add Card</string>
 
 </resources>

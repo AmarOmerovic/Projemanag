@@ -13,13 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="#00FFFFFF"
+        android:layout_marginTop="?attr/actionBarSize"
         app:cardCornerRadius="@dimen/card_view_corner_radius"
         app:cardElevation="@dimen/card_view_elevation_radius"
         app:cardUseCompatPadding="false">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_marginTop="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/recycler_view_padding"
