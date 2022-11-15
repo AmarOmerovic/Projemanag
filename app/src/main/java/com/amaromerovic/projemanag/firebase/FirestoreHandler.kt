@@ -158,16 +158,24 @@ class FirestoreHandler {
             }
     }
 
-    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+    fun addUpdateTaskList(activity: Activity, board: Board) {
         val taskListHashMap = HashMap<String, Any>()
         taskListHashMap[Constants.TASK_LIST] = board.taskList
         fireStore.collection(Constants.BOARDS_COLLECTION_KEY)
             .document(board.documentID)
             .update(taskListHashMap)
             .addOnSuccessListener {
-                activity.addUpdateTaskListSuccess()
+                if (activity is TaskListActivity) {
+                    activity.addUpdateTaskListSuccess()
+                } else if (activity is CardDetailsActivity) {
+                    activity.addUpdateTaskListSuccess()
+                }
             }.addOnFailureListener {
-                activity.hideProgressDialog()
+                if (activity is TaskListActivity) {
+                    activity.hideProgressDialog()
+                } else if (activity is CardDetailsActivity) {
+                    activity.hideProgressDialog()
+                }
                 Toast.makeText(
                     activity,
                     "There was a problem updating the task!",
@@ -235,7 +243,11 @@ class FirestoreHandler {
                 activity.memberAssignSuccess(user)
             }
             .addOnFailureListener {
-                Toast.makeText(activity, "There was a problem assigning the user!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    "There was a problem assigning the user!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 

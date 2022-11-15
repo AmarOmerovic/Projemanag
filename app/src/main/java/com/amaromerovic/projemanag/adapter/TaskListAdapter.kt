@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.activities.TaskListActivity
 import com.amaromerovic.projemanag.databinding.TaskItemBinding
+import com.amaromerovic.projemanag.models.Card
 import com.amaromerovic.projemanag.models.Task
 
 class TaskListAdapter(private val context: Context, private val taskList: ArrayList<Task>) :
@@ -122,6 +123,14 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
         holder.binding.recyclerViewCardList.setHasFixedSize(true)
         val adapter = CardListAdapter(context, model.cards)
         holder.binding.recyclerViewCardList.adapter = adapter
+
+        adapter.setOnCardClick(object : CardListAdapter.OnCardClickListener {
+            override fun onCardClick(cardPosition: Int, card: Card) {
+                if (context is TaskListActivity) {
+                    context.cardDetails(holder.adapterPosition, cardPosition)
+                }
+            }
+        })
     }
 
     override fun getItemCount(): Int {
@@ -154,6 +163,7 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
 
 
     class ViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root)
+
 
     private fun Int.toDP(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
     private fun Int.toPX(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

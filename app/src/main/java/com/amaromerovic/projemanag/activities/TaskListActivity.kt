@@ -13,14 +13,14 @@ import com.amaromerovic.projemanag.firebase.FirestoreHandler
 import com.amaromerovic.projemanag.models.Board
 import com.amaromerovic.projemanag.models.Card
 import com.amaromerovic.projemanag.models.Task
+import com.amaromerovic.projemanag.models.User
 import com.amaromerovic.projemanag.utils.Constants
 
 class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
     private lateinit var myBoardDetails: Board
     private lateinit var boardDocumentID: String
-    private var firstTime = true
-
+    private lateinit var assignedMemberDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +48,17 @@ class TaskListActivity : BaseActivity() {
             FirestoreHandler().getBoardDetails(this, boardDocumentID)
         }
     }
+
+
+    fun cardDetails(taskListPosition: Int, cardPosition: Int) {
+        val intent = Intent(this@TaskListActivity, CardDetailsActivity::class.java)
+        intent.putExtra(Constants.BOARD_DETAIL, myBoardDetails)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.members_menu, menu)
@@ -142,7 +153,7 @@ class TaskListActivity : BaseActivity() {
         super.onResume()
         if (::myBoardDetails.isInitialized) {
             showProgressDialog()
-            FirestoreHandler().addUpdateTaskList(this@TaskListActivity, myBoardDetails)
+            FirestoreHandler().getBoardDetails(this@TaskListActivity, boardDocumentID)
         }
     }
 }
