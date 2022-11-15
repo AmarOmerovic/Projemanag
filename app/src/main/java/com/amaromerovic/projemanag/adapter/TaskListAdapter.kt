@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amaromerovic.projemanag.R
 import com.amaromerovic.projemanag.activities.TaskListActivity
 import com.amaromerovic.projemanag.databinding.TaskItemBinding
 import com.amaromerovic.projemanag.models.Task
-import com.google.android.material.snackbar.Snackbar
 
 class TaskListAdapter(private val context: Context, private val taskList: ArrayList<Task>) :
     RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
@@ -68,7 +67,7 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
                     context.createTaskList(listName)
                 }
             } else {
-                showSnackBar("Please enter a list name!", holder.binding.root)
+                showToast("Please enter a list name!")
             }
         }
 
@@ -90,7 +89,7 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
                     context.updateTaskList(position, listName, model)
                 }
             } else {
-                showSnackBar("Please enter a list name!", holder.binding.root)
+                showToast("Please enter a list name!")
             }
         }
 
@@ -115,7 +114,7 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
                     context.addCardToTaskList(position, cardName)
                 }
             } else {
-                showSnackBar("Please enter a card name!", holder.binding.root)
+                showToast("Please enter a card name!")
             }
         }
 
@@ -149,21 +148,10 @@ class TaskListAdapter(private val context: Context, private val taskList: ArrayL
         alertDialog.show()
     }
 
-    private fun showSnackBar(text: String, view: View) {
-        val snackBar = Snackbar.make(
-            view,
-            text,
-            Snackbar.LENGTH_LONG
-        )
-        val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(
-            ContextCompat.getColor(
-                context,
-                R.color.darkBlue
-            )
-        )
-        snackBar.show()
+    private fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
+
 
     class ViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root)
 

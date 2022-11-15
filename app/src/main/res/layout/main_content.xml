@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/ic_background"
     android:gravity="center"
     android:orientation="vertical"
@@ -12,8 +12,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="#00FFFFFF"
         android:layout_marginTop="?attr/actionBarSize"
+        android:backgroundTint="#00FFFFFF"
         app:cardCornerRadius="@dimen/card_view_corner_radius"
         app:cardElevation="@dimen/card_view_elevation_radius"
         app:cardUseCompatPadding="false">
@@ -23,23 +23,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/recycler_view_padding"
-            tools:listitem="@layout/board_item"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            tools:listitem="@layout/board_item" />
 
 
         <TextView
             android:id="@+id/noBoardsText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/no_boards_available"
-            android:layout_gravity="center"
             android:textColor="@color/darkBlue"
             android:textSize="@dimen/no_boards_available_text_size"
             android:textStyle="normal" />
 
     </androidx.cardview.widget.CardView>
-
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

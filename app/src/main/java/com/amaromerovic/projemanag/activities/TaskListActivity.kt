@@ -1,6 +1,9 @@
 package com.amaromerovic.projemanag.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amaromerovic.projemanag.R
@@ -44,6 +47,23 @@ class TaskListActivity : BaseActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.members_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.actionMembers -> {
+                val intent = Intent(this@TaskListActivity, MembersActivity::class.java)
+                intent.putExtra(Constants.BOARD_DETAIL, boardDetails)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            }
+        }
+        return true
+    }
+
     fun boardDetails(board: Board) {
         hideProgressDialog()
 
@@ -52,20 +72,6 @@ class TaskListActivity : BaseActivity() {
 
         val taskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-//        board.taskList.add(taskList)
-
 
         binding.recyclerViewTaskList.layoutManager =
             GridLayoutManager(this@TaskListActivity, 2, GridLayoutManager.HORIZONTAL, false)
@@ -91,7 +97,7 @@ class TaskListActivity : BaseActivity() {
     }
 
     fun updateTaskList(position: Int, listName: String, model: Task) {
-        val task = Task(listName, model.createdBy)
+        val task = Task(listName, model.createdBy, model.cards)
         boardDetails.taskList[position] = task
         boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
 

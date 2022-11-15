@@ -5,6 +5,7 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 
 object Constants {
+    const val EMAIL = "email"
     const val DURATION_KEY = "Duration"
     const val USERS_COLLECTION_KEY = "Users"
     const val USER_NAME = "name"
@@ -14,6 +15,8 @@ object Constants {
     const val ASSIGNED_TO = "assignedTo"
     const val DOCUMENT_ID = "documentID"
     const val TASK_LIST = "taskList"
+    const val BOARD_DETAIL = "board detail"
+    const val USER_ID = "id"
 
 
     fun getFileExtension(activity: Activity, uri: Uri?): String? {

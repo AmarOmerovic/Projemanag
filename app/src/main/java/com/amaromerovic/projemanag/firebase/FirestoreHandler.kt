@@ -105,6 +105,7 @@ class FirestoreHandler {
             }
             .addOnFailureListener {
                 activity.hideProgressDialog()
+                Toast.makeText(activity, "There was a problem creating the board!", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -124,6 +125,7 @@ class FirestoreHandler {
             }
             .addOnFailureListener {
                 activity.hideProgressDialog()
+                Toast.makeText(activity, "There was a problem displaying the boards!", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -140,6 +142,7 @@ class FirestoreHandler {
             }
             .addOnFailureListener {
                 activity.hideProgressDialog()
+                Toast.makeText(activity, "There was a problem getting the board details!", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -153,6 +156,55 @@ class FirestoreHandler {
                 activity.addUpdateTaskListSuccess()
             }.addOnFailureListener {
                 activity.hideProgressDialog()
+                Toast.makeText(activity, "There was a problem updating the task!", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    fun getAssignedMembers(activity: MembersActivity, assignedTo: ArrayList<String>) {
+        fireStore.collection(Constants.USERS_COLLECTION_KEY)
+            .whereIn(Constants.USER_ID, assignedTo)
+            .get()
+            .addOnSuccessListener { document ->
+                val usersList: ArrayList<User> = ArrayList()
+
+                for (i in document.documents) {
+                    val user = i.toObject(User::class.java)
+                    if (user != null) {
+                        usersList.add(user)
+                    }
+                }
+
+                activity.setUpMembersList(usersList)
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Toast.makeText(
+                    activity,
+                    "There was a problem loading the members!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
+
+    fun getMemberDetails(activity: MembersActivity, email: String) {
+        fireStore.collection(Constants.USERS_COLLECTION_KEY)
+            .whereEqualTo(Constants.EMAIL, email)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.size() > 0) {
+                    val user = document.documents[0].toObject(User::class.java)
+                    if (user != null) {
+                        activity.memberDetails(user)
+                    }
+                } else {
+                    activity.hideProgressDialog()
+                    Toast.makeText(activity, "No such member found!", Toast.LENGTH_LONG).show()
+                }
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Toast.makeText(activity, "Error searching the member!", Toast.LENGTH_LONG).show()
+
             }
     }
 
