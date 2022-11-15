@@ -61,6 +61,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         binding.navView.setNavigationItemSelectedListener(this)
 
+        binding.appBarId.createBoard.setOnClickListener {
+            val intent = Intent(this@MainActivity, CreateBoardActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
     }
 
     fun updateNavigationUserDetails(user: User) {
@@ -69,7 +75,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .load(user.image)
             .fitCenter()
             .placeholder(R.drawable.ic_user_place_holder)
-            .into(navViewHeaderBinding.circularImage);
+            .into(navViewHeaderBinding.circularImage)
 
         navViewHeaderBinding.userName.text = user.name.toString()
 
